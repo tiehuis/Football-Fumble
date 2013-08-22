@@ -32,6 +32,7 @@ Release 1:
 - Physics Engine Implemented; Collisions working
 - 1 human-controlled player, no AI
 - Simple GUI Skeleton complete to display user interaction
+- Simple dribbling gameplay (possibly around cones) on a timer
 
 Release 2:
 
