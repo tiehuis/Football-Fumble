@@ -1,12 +1,16 @@
 package nz.ac.waikato.cs.comp204.spartans.footballfumble;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public class FixedImage {
+public class FixedImage extends Sprite{
 	
-	private DrawView drawView;
+	
+	public FixedImage(int initX, int initY, DrawView drawView, Bitmap bitmap) {
+		super(initX, initY, 0, 0, drawView, bitmap);
+	}
+	
+	/*private DrawView drawView;
 	private Bitmap bitmap;
 	private int x = 0, y = 0;
 	
@@ -21,5 +25,5 @@ public class FixedImage {
 	
 	public void onDraw(Canvas canvas){
 		canvas.drawBitmap(bitmap, x, y, null);
-	}
+	}*/
 }

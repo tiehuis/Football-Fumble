@@ -19,10 +19,11 @@ public class DrawView extends View{
 	public DrawView(Context context) {
 		super(context);
 		Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_150px);
-		sprite1 = new Sprite(random.nextInt(600), random.nextInt(600), this, bitmap1);
+		sprite1 = new Ball(random.nextInt(600), random.nextInt(600), this, bitmap1);
 		Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_150px);
 		ball = new Ball(random.nextInt(600), random.nextInt(600), this, bitmap2);
-		//goal = new FixedImage(0, 0, this, BitmapFactory.decodeResource(getResources(),  R.drawable.goal_100px_15px), null);
+		Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_50px);
+		goal = new FixedImage(random.nextInt(600), random.nextInt(600), this, bitmap3);
 	}
 	
 	@SuppressLint("WrongCall")
@@ -30,12 +31,16 @@ public class DrawView extends View{
 	public void onDraw(Canvas canvas){
 		ball.onDraw(canvas);
 		sprite1.onDraw(canvas);
+		goal.onDraw(canvas);
 		
-		if(sprite1.collides(ball) || ball.collides(sprite1)){
+		if(sprite1.collides(ball) || sprite1.collides(goal)){
 			sprite1.changeDirection();
-			ball.changeDirection();
 		}
 		
+		if(ball.collides(sprite1) || ball.collides(goal)){
+			ball.changeDirection();
+		}
+				
 		invalidate();
 	}
 }

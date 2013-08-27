@@ -11,13 +11,15 @@ public class Sprite{
 	private DrawView drawView;
 	private Bitmap bitmap;
 	private int x = 0, y = 0;
-	private int xSpeed = 6, ySpeed = 6;
+	private int xSpeed, ySpeed;
 	private boolean currentCollision = false;
 	private Random random = new Random();
 	
-	public Sprite(int initX, int initY, DrawView drawView, Bitmap bitmap){
+	public Sprite(int initX, int initY, int xSpd, int ySpd, DrawView drawView, Bitmap bitmap){
 		this.x = initX;
 		this.y = initY;
+		this.xSpeed = xSpd;
+		this.ySpeed = ySpd;
 		this.drawView = drawView;
 		this.bitmap = bitmap;
 		System.out.println("sprite right: " + bitmap.getWidth());
