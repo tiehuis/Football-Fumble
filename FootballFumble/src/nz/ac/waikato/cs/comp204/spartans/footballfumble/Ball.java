@@ -9,6 +9,6 @@ public class Ball extends Sprite{
 	public Ball(int initX, int initY, DrawView drawView, Bitmap bitmap) {
 		super(initX, initY, 6, 6, drawView, bitmap);
 	}
-	
 	// Methods for the ball...
+	
 }

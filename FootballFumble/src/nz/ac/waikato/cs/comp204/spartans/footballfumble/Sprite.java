@@ -5,15 +5,19 @@ import java.util.Random;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Region;
+import android.graphics.Region.Op;
 
 public class Sprite{
 	
 	private DrawView drawView;
 	private Bitmap bitmap;
-	private int x = 0, y = 0;
+	private int x = 0;
+	private int y = 0;
 	private int xSpeed, ySpeed;
 	private boolean currentCollision = false;
 	private Random random = new Random();
+	private Integer collisions = 0;
 	
 	public Sprite(int initX, int initY, int xSpd, int ySpd, DrawView drawView, Bitmap bitmap){
 		this.x = initX;
@@ -23,7 +27,8 @@ public class Sprite{
 		this.drawView = drawView;
 		this.bitmap = bitmap;
 		System.out.println("sprite right: " + bitmap.getWidth());
-		System.out.println("sprite bottom: " + bitmap.getHeight());
+		System.out.println("sprite bottom: " + bitmap.getHeight()); 
+		//check bounds and also collisions with other sprites to ensure they don't start out of bounds or in another sprite
 	}
 	
 	protected void update(){
@@ -46,7 +51,9 @@ public class Sprite{
 	
 	public void onDraw(Canvas canvas){
 		update();
-		canvas.drawBitmap(bitmap, x, y, null);
+		//canvas.clipRect(0,0,300,600,Region.Op.REPLACE);
+		canvas.drawBitmap(bitmap,x,y,null);
+		//canvas.drawBitmap(bitmap,x*480/200,y*800/300,null);
 	}
 	
 	@SuppressLint("WrongCall")
@@ -61,13 +68,17 @@ public class Sprite{
 		// s1 coming from top-left
 		if(this.getLeft() <= s1.getRight() && this.getTop() <= s1.getBottom() && this.getBottom() >= s1.getBottom() && this.getRight() >= s1.getRight()){
 			// If this is the same collision as the last one then we don't want to recognise it until the current collision is finished
-			if(currentCollision)
+			this.collisions++;
+			s1.collisions++;
+			if(currentCollision)	
 				return false;
 			return true;
 		}
 		
 		// s1 coming from top-right
 		if(this.getLeft() <= s1.getRight() && this.getTop() <= s1.getBottom() && this.getRight() >= s1.getLeft() && this.getBottom() >= s1.getBottom()){
+			this.collisions++;
+			s1.collisions++;
 			if(currentCollision)
 				return false;
 			return true;
@@ -106,6 +117,10 @@ public class Sprite{
 	
 	public int getHeight(){
 		return bitmap.getHeight();
+	}
+	
+	public Integer getCollisions(){
+		return collisions;
 	}
 }
 
