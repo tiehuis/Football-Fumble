@@ -1,67 +1,50 @@
 package nz.ac.waikato.cs.comp204.spartans.footballfumble;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.View;
 
 public class DrawView extends View{
 
 	private Random random = new Random();
-	public Ball ball;
+	public Ball ball;	
 	public Sprite sprite1;
 	public FixedImage goal;
-	public List<Sprite> spriteList = new ArrayList<Sprite>();
-	public Paint paint = new Paint(); 
+	public player Player;
 	
 	public DrawView(Context context) {
 		super(context);
-		Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_50px);
-		sprite1 = new Sprite(200, 400, -2, 5, this, bitmap1);
-		spriteList.add(sprite1);
+		Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),  R.drawable.player);
+		sprite1 = new Sprite(random.nextInt(600), random.nextInt(600), 6, 6, this, bitmap1, 70);		
 		Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_50px);
-		ball = new Ball(200, 200, this, bitmap2);	
-		spriteList.add(ball);
-		Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_25px);
-		goal = new FixedImage(105, 112, this, bitmap3);
-		spriteList.add(goal);
-
-
+		ball = new Ball(random.nextInt(600), random.nextInt(600), this, bitmap2);
+		//goal = new FixedImage(0, 0, this, BitmapFactory.decodeResource(getResources(),  R.drawable.goal_100px_15px), null);
+		Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_150px);
+		Player = new player(250, 500, this, bitmap3);			
 	}
 	
 	@SuppressLint("WrongCall")
 	@Override
-	public void onDraw(Canvas canvas){			
-		for(int i=0; i<spriteList.size();i++){
-			spriteList.get(i).onDraw(canvas);
-		}
-		
-		/*ball.onDraw(canvas);
+	public void onDraw(Canvas canvas){
+		ball.onDraw(canvas);		
 		sprite1.onDraw(canvas);
-		goal.onDraw(canvas);*/
+		Player.onDraw(canvas);
 		
-		if (sprite1.collides(goal))
-			sprite1.changeDirection();
+		// When the ball is drawn, the speed is slowed
+		ball.setxSpeed(ball.getxSpeed() * .95);
+		ball.setySpeed(ball.getySpeed() * .95);
 		
-		if (ball.collides(goal))
-			ball.changeDirection();
 		
 		if(sprite1.collides(ball) || ball.collides(sprite1)){
-			sprite1.changeDirection();
-			ball.changeDirection();
-		}
+			// Only the ball changes direction
+			ball.changeDirection(sprite1);		
+		}	
 		
-		paint.setColor(Color.BLACK); 
-		paint.setTextSize(30); 
-		canvas.drawText(ball.getCollisions().toString(), 20, 40, paint); 
-				
 		invalidate();
 	}
 }
