@@ -40,7 +40,7 @@ public class DrawView extends View{
 		ball.setySpeed(ball.getySpeed() * .95);
 		
 		
-		if(sprite1.collides(ball) || ball.collides(sprite1)){
+		if(sprite1.collides(ball) || ball.collides(sprite1) || ball.collides(player)){
 			// Only the ball changes direction
 			ball.changeDirection(sprite1);		
 		}	

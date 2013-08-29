@@ -9,7 +9,7 @@ public class Player extends Sprite{
 	
 	private boolean isDown = false;
 	private boolean firstTouch = false;
-	double touchX, touchY, speed, acceleration = 3;
+	double touchX, touchY, speed, acceleration = 0.086;
 	int topSpeed = 6;
 	public Player(int initX, int initY, DrawView drawView, Bitmap bitmap) {
 		super(initX, initY, 6, 6, drawView, bitmap, 5);
@@ -22,41 +22,20 @@ public class Player extends Sprite{
 			if(isDown){
 				if(xSpeed <= topSpeed){
 					speed += acceleration;
-					if(speed > topSpeed)
+					if(speed > topSpeed){
 						speed = topSpeed;
+					}
 				}
 			}
 			else{
-				/*
 				if(speed > 0){
 					speed -= acceleration;
-					if(speed < 0)
+					if(speed <= 0){
 						speed = 0;
-					System.err.print("Fail");
-				}*/
-				speed = 0;
-				return;
-			}/*
-			if(touchX > x){
-				if(touchY > y){
-					trigX = touchX - x;
-					trigY = touchY - y;
-				}
-				else{
-					trigX = touchX - x;
-					trigY = y - touchY;
-				}
+						return;
+					}
 			}
-			else{
-				if(touchY > y){
-					trigX = x - touchX;
-					trigY = touchY - y;
-				}
-				else{
-					trigX = x - touchX;
-					trigY = y - touchY;
-				}
-			}*/
+			}
 			trigX = touchX - x;
 			trigY = touchY - y;
 			distance = Math.sqrt((trigX * trigX) + (trigY * trigY));
@@ -73,35 +52,7 @@ public class Player extends Sprite{
 				y -= trigY;
 			}			
 		}
-	/*
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		firstTouch = true;
-		touchX = event.getX();
-		touchY= event.getY();
-		switch (event.getAction()) {
-		
-		case MotionEvent.ACTION_DOWN:
-			isDown = true;
-			break;
-
-		case MotionEvent.ACTION_MOVE:
-			isDown = true;	
-			break;
-	            		
-		case MotionEvent.ACTION_UP:
-			isDown = false;
-	        break;
-	        
-		case MotionEvent.ACTION_OUTSIDE:
-			isDown = false;
-		    break;
-		}	
-		v.invalidate();
-	return true;			
-	}
-
-*/
+	
 	drawView.setOnTouchListener(new View.OnTouchListener() 
 	{
 	    public boolean onTouch(View v, MotionEvent e) 
