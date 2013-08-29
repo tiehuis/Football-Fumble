@@ -15,17 +15,17 @@ public class DrawView extends View{
 	public Ball ball;	
 	public Sprite sprite1;
 	public FixedImage goal;
-	public player Player;
+	public Player player;
 	
 	public DrawView(Context context) {
 		super(context);
-		Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),  R.drawable.player);
+		Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_150px);
 		sprite1 = new Sprite(random.nextInt(600), random.nextInt(600), 6, 6, this, bitmap1, 70);		
 		Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_50px);
 		ball = new Ball(random.nextInt(600), random.nextInt(600), this, bitmap2);
 		//goal = new FixedImage(0, 0, this, BitmapFactory.decodeResource(getResources(),  R.drawable.goal_100px_15px), null);
-		Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),  R.drawable.ball_150px);
-		Player = new player(250, 500, this, bitmap3);			
+		Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(),  R.drawable.ic_launcher);
+		player = new Player(250, 500, this, bitmap3);			
 	}
 	
 	@SuppressLint("WrongCall")
@@ -33,7 +33,7 @@ public class DrawView extends View{
 	public void onDraw(Canvas canvas){
 		ball.onDraw(canvas);		
 		sprite1.onDraw(canvas);
-		Player.onDraw(canvas);
+		player.onDraw(canvas);
 		
 		// When the ball is drawn, the speed is slowed
 		ball.setxSpeed(ball.getxSpeed() * .95);

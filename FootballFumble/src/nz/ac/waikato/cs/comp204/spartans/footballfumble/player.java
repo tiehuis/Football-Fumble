@@ -5,13 +5,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-public class player extends Sprite{
+public class Player extends Sprite{
 	
 	private boolean isDown = false;
 	private boolean firstTouch = false;
 	double touchX, touchY, speed, acceleration = 3;
 	int topSpeed = 6;
-	public player(int initX, int initY, DrawView drawView, Bitmap bitmap) {
+	public Player(int initX, int initY, DrawView drawView, Bitmap bitmap) {
 		super(initX, initY, 6, 6, drawView, bitmap, 5);
 	}
 	
