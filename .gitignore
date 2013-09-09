@@ -5,7 +5,10 @@
 *.pydevproject
 .project
 .metadata
-bin/
+Football-Fumble/bin/
+Football-Fumble/.classpath
+Football-Fumble/.project
+Football-Fumble/.settings/
 tmp/
 *.tmp
 *.bak
