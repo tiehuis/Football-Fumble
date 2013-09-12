@@ -41,7 +41,6 @@ public class Sprite{
 	
 	/**
 	 * Initializes the Sprite instance.
-	 * 
 	 * @param initX 	the initial x position
 	 * @param initY 	the initial y position
 	 * @param xSpd 		the initial x speed
@@ -63,22 +62,14 @@ public class Sprite{
 	
 	/**
 	 * Checks the sprites position and runs the code each time {@link #onDraw(Canvas)} is called. 
-	 * 
 	 */
-	protected void update(){ 				// Should be abstracted out into a getBounds() method, as each update() method will differ for the type.
-		if(x > drawView.getWidth() - bitmap.getWidth() - getxSpeed()){
+	protected void update(){
+		if(!inxBounds()){
 			setxSpeed(getxSpeed() * -1);
 		}
-		if(x + getxSpeed() < 0){
-			setxSpeed(getxSpeed() * -1);
-		}
-		if(y > drawView.getHeight() - bitmap.getHeight() - getySpeed()){
+		if(!inyBounds()){
 			setySpeed(getySpeed() * -1);
-		}
-		if((y + getySpeed()) < 0){
-			setySpeed(getySpeed() * -1);
-		}
-			
+		}		
 		x += getxSpeed();
 		y += getySpeed();
 	}
@@ -95,7 +86,6 @@ public class Sprite{
 	
 	/**
 	 * Moves the point by dx and dy.
-	 * 
 	 * @param canvas
 	 * @param dx
 	 * @param dy
@@ -109,7 +99,6 @@ public class Sprite{
 	
 	/**
 	 * Checks the collision status of this instance against another Sprite.
-	 * 
 	 * @param sprite
 	 * @return
 	 */
@@ -142,7 +131,6 @@ public class Sprite{
 	
 	/**
 	 * Sets the new x and y directional speed.
-	 * 
 	 * @param sprite the sprite that this instance is colliding with
 	 */
 	public void setDirection(Sprite sprite){
@@ -152,26 +140,52 @@ public class Sprite{
 	
 	/**
 	 * Calculates the new x directional speed based upon the mass of the two sprites that are colliding.
-	 * 
 	 * @param sprite the sprite that this instance is colliding with
 	 * @return the new x direction speed of this sprite
 	 */
 	public double newXSpeed(Sprite sprite){
 		
 		// Applies momentum to the objects. Player mass is 70, ball is 5. *5 slows initial speed
-		return ((this.xSpeed * this.mass) + (sprite.xSpeed * sprite.mass))/(this.mass * 5);
+		return ((this.xSpeed * this.mass) + (sprite.xSpeed * sprite.mass))/(this.mass * 7);
 	}
 		
 	/**
 	 * Calculates the new y directional speed based upon the mass of the two sprites which are colliding.
-	 * 
 	 * @param sprite the sprite that this instance is colliding with
 	 * @return the new y direction speed of this sprite
 	 */
 	public double newYSpeed(Sprite sprite){
 		
 		// Applies momentum to the objects. Player mass is 70, ball is 5. *5 slows initial speed
-		return ((this.ySpeed * this.mass) + (sprite.ySpeed * sprite.mass))/(this.mass * 5);		
+		return ((this.ySpeed * this.mass) + (sprite.ySpeed * sprite.mass))/(this.mass * 7);		
+	}
+	
+	/**
+	 * Checks if the current sprite is within the y-region bounded by the drawView height.
+	 * @return false if out of y bound, otherwise true
+	 */
+	public boolean inyBounds(){
+		if(y > drawView.getHeight() - bitmap.getHeight() - getySpeed()){
+			return false;
+		}
+		if(y + getySpeed() < 0){
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * Checks if the current sprite is within the x-region bounded by the drawView width.
+	 * @return false if out of x bound, otherwise true
+	 */
+	public boolean inxBounds(){
+		if(x > drawView.getWidth() - bitmap.getWidth() - getxSpeed()){
+			return false;
+		}
+		if(x + getxSpeed() < 0){
+			return false;
+		}		
+		return true;	
 	}
 	
 	/**
@@ -210,7 +224,7 @@ public class Sprite{
 	}
 	
 	/**
-	 * @return width width of bitmap image
+	 * @return the width of bitmap image
 	 */
 	public int getWidth(){
 		return bitmap.getWidth();

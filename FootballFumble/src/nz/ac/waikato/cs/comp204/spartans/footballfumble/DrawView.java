@@ -22,16 +22,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.View;
+import android.util.DisplayMetrics;
 
 /**
  *  The drawView class.
- * 
  *	@author Spartans
  * */
 public class DrawView extends View{
 
 	private	Random 		random = new Random();
 	private Ball 		ball;	
+	private DisplayMetrics displayMetrics;
+	private int screenWidth;
+	private int screenHeight;
 	private static ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
 	
 	/**
@@ -39,16 +42,13 @@ public class DrawView extends View{
 	 */
 	public DrawView(Context context) {
 		super(context);	
-		
-		// Initialize some Sprite objects. Best to create and place this in a new method startUp().
-		Bitmap bitmap1	= BitmapFactory.decodeResource(getResources(),  R.drawable.ball_50px);
-		ball 			= new Ball(random.nextInt(600), random.nextInt(600), this, bitmap1);
-		Bitmap bitmap2 	= BitmapFactory.decodeResource(getResources(),  R.drawable.ic_launcher);
-		Player player1 	= new Player(100, 100, this, bitmap2);		//Need instantiation of classes, even if it says they are not explicitly used.	
+		this.displayMetrics = context.getResources().getDisplayMetrics();
+		this.screenHeight = displayMetrics.widthPixels;
+		this.screenWidth = displayMetrics.heightPixels;
+		setupField();
 	}
 	
 	/**
-	 * 
 	 *@param canvas
 	 */
 	@SuppressLint("WrongCall")
@@ -58,6 +58,11 @@ public class DrawView extends View{
 		// Draw every sprite onto the canvas
 		for (Sprite sprite : spriteList){
 			sprite.onDraw(canvas);
+		}
+		
+		if(Math.abs(ball.getxSpeed()) < 0.1 || Math.abs(ball.getySpeed()) < 0.1){
+			ball.setxSpeed(0);
+			ball.setySpeed(0);
 		}
 		
 		// When the ball is draw, slow the x and y speed. Should move out of the DrawView and into Sprite Update method.
@@ -103,6 +108,27 @@ public class DrawView extends View{
 		}	
 		
 		invalidate();
+	}
+	
+	/**
+	 * Sets up the field with a default start state.
+	 */
+	public void setupField(){
+		
+		spriteList.clear();
+		// Put code that runs upon starting a match/socring a goal.
+		// Could just remove draw list and reset the game each time, only keeping the...
+		// ... score changes through the states.
+		
+		// Initialize some Sprite objects. Best to create and place this in a new method startUp().
+		Bitmap bitmap1	= BitmapFactory.decodeResource(getResources(),  R.drawable.ball_25px);
+		Bitmap bitmap2 	= BitmapFactory.decodeResource(getResources(),  R.drawable.player_50_75);
+		Bitmap bitmap3	= BitmapFactory.decodeResource(getResources(),	R.drawable.cone_80_80);
+		ball 			= new Ball(random.nextInt(600), random.nextInt(600), this, bitmap1);
+		Player player1 	= new Player(300, 300, this, bitmap2);		//Need instantiation of classes, even if it says they are not explicitly used.
+		FixedImage cone1 = new FixedImage(this.screenWidth/3-bitmap3.getWidth()/2, this.screenHeight/2-(bitmap3.getHeight()/2), this, bitmap3);
+		FixedImage cone2 = new FixedImage(this.screenWidth/3-bitmap3.getWidth()/2, this.screenHeight/2-(bitmap3.getHeight()/2)+300, this, bitmap3);
+		FixedImage cone3 = new FixedImage(this.screenWidth/3-bitmap3.getWidth()/2, this.screenHeight/2-(bitmap3.getHeight()/2)+600, this, bitmap3);
 	}
 	
 	/**

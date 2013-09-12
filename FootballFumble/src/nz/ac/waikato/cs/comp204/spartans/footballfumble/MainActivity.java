@@ -21,8 +21,9 @@ import android.graphics.Color;
 
 /**
  *  The MainActivity class.
- * 
+ *
  *	Is the initial activity that is entered upon program start. The entry point for the program.
+ *	@author Spartans
  * */
 public class MainActivity extends Activity {
 	
@@ -37,9 +38,10 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // keeps the screen on
 		
+		
 		// Sets a new drawView with background yellow to occupy the whole available screen.
 		drawView 	= new DrawView(this);
-		drawView.setBackgroundColor(Color.YELLOW);
+		drawView.setBackgroundColor(Color.GREEN);
 		setContentView(drawView);
 	}
 }

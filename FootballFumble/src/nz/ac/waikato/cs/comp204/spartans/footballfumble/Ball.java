@@ -21,10 +21,11 @@ import android.graphics.Bitmap;
  * 
  * 	Holds a constant for the mass of the ball which is
  * 	passed to the superclass upon instantiation of a new Ball.
- * 
  * @author Spartans
  * */
 public class Ball extends Sprite{
+	
+	// If ball bounces of wall it moves indefinitely, but not if colliding with player
 	
 	private static int BALL_MASS = 5;
 	
@@ -32,7 +33,6 @@ public class Ball extends Sprite{
  	* Initializes the Ball instance using {@link 
  	* nz.ac.waikato.cs.comp204.spartans.footballfumble.Sprite#Sprite(int, int, int, int, DrawView, Bitmap, double)}
  	* with an initial speed of (0,0).
- 	* 
  	* @param initX the initial x position
  	* @param initY the initial y position
  	* @param drawView the view the ball will exist
