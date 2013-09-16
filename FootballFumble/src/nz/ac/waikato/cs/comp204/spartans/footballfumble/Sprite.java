@@ -1,12 +1,12 @@
 /*
  * File: Sprite.java - A Sprite Class
  *
- * OD: 'Name'
+ * OD: Spartans
  * Copyright: Spartans, 23/08/13++
  * License: GNU GPL v2
  * 
  * Notes: This file is used to instantiate a Ball
- * Issues: This program may be redundant
+ * Issues:
  * Reference:
  * Implements:
  * 
@@ -14,7 +14,6 @@
 
 package nz.ac.waikato.cs.comp204.spartans.footballfumble;
 
-import java.util.Random;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -36,18 +35,17 @@ public class Sprite{
 	protected int x 					= 0;
 	protected int y						= 0;
 	protected boolean currentCollision	= false;
-	protected Random random				= new Random();
 	protected double mass 				= 0;
 	
 	/**
 	 * Initializes the Sprite instance.
-	 * @param initX 	the initial x position
-	 * @param initY 	the initial y position
-	 * @param xSpd 		the initial x speed
-	 * @param ySpd 		the initial y speed
-	 * @param drawView 	the view which the object is to be drawn on
-	 * @param bitmap 	the bitmap image associated with this sprite
-	 * @param mass		the mass of the sprite
+	 * @param initX the initial x position of this sprite.
+	 * @param initY the initial y position of this sprite.
+	 * @param xSpd the initial x speed of this sprite.
+	 * @param ySpd the initial y speed of this sprite.
+	 * @param drawView the view which this sprite is to be drawn on.
+	 * @param bitmap the bitmap image associated with this sprite.
+	 * @param mass the mass of the sprite.
 	 */
 	public Sprite(int initX, int initY, int xSpd, int ySpd, DrawView drawView, Bitmap bitmap, double mass){
 		this.x 			= initX;
@@ -65,10 +63,10 @@ public class Sprite{
 	 */
 	protected void update(){
 		if(!inxBounds()){
-			setxSpeed(getxSpeed() * -1);
+			setxSpeed(getxSpeed() * -1 + 3);
 		}
 		if(!inyBounds()){
-			setySpeed(getySpeed() * -1);
+			setySpeed(getySpeed() * -1 + 3);
 		}		
 		x += getxSpeed();
 		y += getySpeed();
@@ -86,9 +84,10 @@ public class Sprite{
 	
 	/**
 	 * Moves the point by dx and dy.
-	 * @param canvas
-	 * @param dx
-	 * @param dy
+	 * @deprecated the {@link #update()} method is used to move the object.
+	 * @param canvas the canvas being used to draw this image on.
+	 * @param dx the delta to move in the x direction.
+	 * @param dy the delta to move in the y direction.
 	 */
 	@SuppressLint("WrongCall")
 	public void move(Canvas canvas, int dx, int dy){
@@ -99,8 +98,8 @@ public class Sprite{
 	
 	/**
 	 * Checks the collision status of this instance against another Sprite.
-	 * @param sprite
-	 * @return
+	 * @param sprite the Sprite being compared against this Sprite.
+	 * @return true if a currentCollision is occuring, false otherwise
 	 */
 	public boolean collides(Sprite sprite){
 		
@@ -134,8 +133,8 @@ public class Sprite{
 	 * @param sprite the sprite that this instance is colliding with
 	 */
 	public void setDirection(Sprite sprite){
-		setxSpeed(newXSpeed(sprite));
-		setySpeed(newYSpeed(sprite));
+		setxSpeed(newxSpeed(sprite));
+		setySpeed(newySpeed(sprite));
 	}
 	
 	/**
@@ -143,9 +142,9 @@ public class Sprite{
 	 * @param sprite the sprite that this instance is colliding with
 	 * @return the new x direction speed of this sprite
 	 */
-	public double newXSpeed(Sprite sprite){
+	public double newxSpeed(Sprite sprite){
 		
-		// Applies momentum to the objects. Player mass is 70, ball is 5. *5 slows initial speed
+		// Applies momentum to the objects. Player mass is 70, ball is 5. *7 slows initial speed
 		return ((this.xSpeed * this.mass) + (sprite.xSpeed * sprite.mass))/(this.mass * 7);
 	}
 		
@@ -154,9 +153,9 @@ public class Sprite{
 	 * @param sprite the sprite that this instance is colliding with
 	 * @return the new y direction speed of this sprite
 	 */
-	public double newYSpeed(Sprite sprite){
+	public double newySpeed(Sprite sprite){
 		
-		// Applies momentum to the objects. Player mass is 70, ball is 5. *5 slows initial speed
+		// Applies momentum to the objects. Player mass is 70, ball is 5. *7 slows initial speed
 		return ((this.ySpeed * this.mass) + (sprite.ySpeed * sprite.mass))/(this.mass * 7);		
 	}
 	
@@ -165,10 +164,12 @@ public class Sprite{
 	 * @return false if out of y bound, otherwise true
 	 */
 	public boolean inyBounds(){
+		// Bottom of screen
 		if(y > drawView.getHeight() - bitmap.getHeight() - getySpeed()){
 			return false;
 		}
-		if(y + getySpeed() < 0){
+		// Top of screen
+		if(y + getySpeed() < 35){
 			return false;
 		}
 		return true;
@@ -179,9 +180,11 @@ public class Sprite{
 	 * @return false if out of x bound, otherwise true
 	 */
 	public boolean inxBounds(){
+		// Right of screen
 		if(x > drawView.getWidth() - bitmap.getWidth() - getxSpeed()){
 			return false;
 		}
+		// Left of screen
 		if(x + getxSpeed() < 0){
 			return false;
 		}		
@@ -196,28 +199,28 @@ public class Sprite{
 	}
 	
 	/**
-	 * @return left where left of bitmap image is positioned on canvas
+	 * @return the x position of the left of the bitmap image on canvas.
 	 */
 	public int getLeft(){
 		return this.x;
 	}
 	
 	/**
-	 * @return top where top of bitmap image is positioned on canvas
+	 * @return the y position of the top of the bitmap image on canvas.
 	 */
 	public int getTop(){
 		return this.y;
 	}
 	
 	/**
-	 * @return right where right of bitmap image is positioned on canvas
+	 * @return the x position of the right of the bitmap image on canvas.
 	 */
 	public int getRight(){
 		return this.x + bitmap.getWidth();
 	}
 	
 	/**
-	 * @return bottom where bottom of bitmap image is positioned on canvas
+	 * @return the y position of the bottom of the bitmap image on canvas,
 	 */
 	public int getBottom(){
 		return this.y + bitmap.getHeight();
@@ -265,4 +268,3 @@ public class Sprite{
 		this.ySpeed = ySpeed;
 	}
 }
-
