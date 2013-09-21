@@ -44,8 +44,8 @@ public class DrawView extends View{
 	public DrawView(Context context) {
 		super(context);	
 		this.displayMetrics	 = context.getResources().getDisplayMetrics();
-		this.screenHeight	 = displayMetrics.widthPixels;
-		this.screenWidth	 = displayMetrics.heightPixels;
+		this.screenHeight	 = displayMetrics.heightPixels;
+		this.screenWidth	 = displayMetrics.widthPixels;
 		setupField();
 	}
 	
@@ -121,8 +121,10 @@ public class DrawView extends View{
 		Bitmap bitmap1	= BitmapFactory.decodeResource(getResources(),  R.drawable.ball_25px);
 		Bitmap bitmap2 	= BitmapFactory.decodeResource(getResources(),  R.drawable.player_50_75);
 		Bitmap bitmap3	= BitmapFactory.decodeResource(getResources(),	R.drawable.cone_80_80);
-		ball 			= new Ball(400, 1080, this, bitmap1);
-		Player player1 	= new Player(400, 1150, this, bitmap2);
+		ball 			= new Ball(100, 200, this, bitmap1);
+		MatchGlobal.matchBall = ball; // can do this in a more appropriate position
+		Player player1 	= new Player(100, 250, this, bitmap2);
+		AI ai1 = new AI(200, 300, this, bitmap2);
 		
 		if(!fixedDisplayed){			
 			FixedImage cone1 = new FixedImage(this.screenWidth/3-bitmap3.getWidth()/2, this.screenHeight/2-(bitmap3.getHeight()/2), this, bitmap3);

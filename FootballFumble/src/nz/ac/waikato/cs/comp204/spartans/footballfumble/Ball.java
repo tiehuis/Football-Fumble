@@ -9,7 +9,6 @@
  * Issues: The ballSpeed is updated in the drawView and not here.
  * Reference: Sprite
  * Implements:
- * 
  */
 
 package nz.ac.waikato.cs.comp204.spartans.footballfumble;

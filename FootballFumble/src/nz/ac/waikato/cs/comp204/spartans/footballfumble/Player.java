@@ -28,10 +28,10 @@ public class Player extends Sprite{
 	
 	private static int TOP_SPEED		= 5;
 	private static int PLAYER_MASS 		= 70;
-	private static double ACCELERATION 	= 2;
+	private static double ACCELERATION 	= 2;		 //ensure acceleration is always positive
 	private boolean isDown 				= false;
 	private boolean firstTouch 			= false;	
-	private double touchX, touchY, speed;
+	private double touchX, touchY, speed; 			 //ensure speed is never negative.
 	
 	/**
 	 * Initializes the Player instance using {@link 
@@ -86,13 +86,13 @@ public class Player extends Sprite{
 			
 			// If a touch is on the screen accelerate the player towards the touch position.
 			if(isDown){
-				if(speed <= TOP_SPEED){
+				if(speed + ACCELERATION <= TOP_SPEED){ // Check for if speed < 0 here.
 					speed += ACCELERATION;
 				}else{
 						speed = TOP_SPEED;
 				}
 			}else{ // a touch is not on the screen so decelerate the player.
-				if(speed >0){
+				if((speed -= ACCELERATION/5) >0){
 					speed -= ACCELERATION/5;
 				}else{
 					speed = 0;
@@ -104,7 +104,8 @@ public class Player extends Sprite{
 			distance	= Math.sqrt((trigX * trigX) + (trigY * trigY));
 			theta 		= Math.acos(trigX / distance);	
 			
-			// If within 5 pixels of target, don't move
+			// If within 5 pixels of target, don't move. Due to the way android calculates
+			// your current e.X and e.Y, there is a lot of variance and without this the player will vibrate underneath the finger.
 			if (distance < 5){
 				return;
 			}
