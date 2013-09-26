@@ -62,16 +62,6 @@ public class DrawView extends View{
 		for (Sprite sprite : spriteList){
 			sprite.onDraw(canvas);
 		}
-		// When the ball is draw, slow the x and y speed.
-		if(Math.abs(ball.getxSpeed()) > 0.5 || Math.abs(ball.getySpeed()) > 0.5){
-			ball.setxSpeed(ball.getxSpeed() * .95);
-			ball.setySpeed(ball.getySpeed() * .95);
-
-		}else{
-			// If x or y speed is less than 0.3, stop the ball moving
-			ball.setxSpeed(0);
-			ball.setySpeed(0);
-		}
 		
 		for (Sprite sprite1 : spriteList){
 			for (Sprite sprite2 : spriteList){
