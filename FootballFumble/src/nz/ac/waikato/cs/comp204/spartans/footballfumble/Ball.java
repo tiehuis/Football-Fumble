@@ -38,4 +38,30 @@ public class Ball extends Sprite{
 	public Ball(int initX, int initY, DrawView drawView, Bitmap bitmap) {		
 		super(initX, initY, 0, 0, drawView, bitmap, BALL_MASS);
 	}
+	
+	public void update(){
+		
+		// When the ball is draw, slow the x and y speed.
+		if(Math.abs(this.getxSpeed()) > 0.5 || Math.abs(this.getySpeed()) > 0.5){
+			this.setxSpeed(ball.getxSpeed() * .95);
+			this.setySpeed(ball.getySpeed() * .95);
+
+		}else{
+			// If x or y speed is less than 0.3, stop the ball moving
+			this.setxSpeed(0);
+			this.setySpeed(0);
+		}
+		
+		if(!inxBounds()){
+			x = drawView.getWidth();
+			setxSpeed((getxSpeed() + 3) * -1);
+		}
+		if(!inyBounds()){
+			y = drawView.getHeight();
+			setySpeed((getySpeed() + 3) * -1);
+		}	
+		
+		x += getxSpeed();
+		y += getySpeed();
+	}
 }
