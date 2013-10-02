@@ -29,9 +29,10 @@ public class Player extends Sprite{
 	private boolean isDown 				= false;
 	private boolean firstTouch 			= false;
 	private double touchX, touchY, speed;
-	private static int TOP_SPEED		= 6;
-	private static int PLAYER_MASS 		= 5;
-	private static double ACCELERATION 	= 0.086;
+	private static int TOP_SPEED		= 3;
+	private static int PLAYER_MASS 		= 10;
+	private static double ACCELERATION 	= 1.05;
+	private static double DECCELERATION 	= 0.95;
 	
 	/**
 	 * Initializes the Player instance using {@link 
@@ -45,7 +46,7 @@ public class Player extends Sprite{
 	 * @param bitmap
 	 */
 	public Player(int initX, int initY, DrawView drawView, Bitmap bitmap) {
-		super(initX, initY, 6, 6, drawView, bitmap, PLAYER_MASS);
+		super(initX, initY, 3, 3, drawView, bitmap, PLAYER_MASS);
 	}
 	
 	/**
@@ -64,8 +65,10 @@ public class Player extends Sprite{
 			
 			// If a touch is on the screen accelerate the player towards the touch position.
 			if(isDown){
-				if(xSpeed <= TOP_SPEED){
-					speed += ACCELERATION;
+				if(speed <= TOP_SPEED){
+					if(speed == 0)
+						speed = 0.05;
+					speed *= ACCELERATION;
 					if(speed > TOP_SPEED){
 						speed = TOP_SPEED;
 					}
@@ -75,8 +78,8 @@ public class Player extends Sprite{
 			// A touch is not on the screen so decelerate the player.
 			else{
 				if(speed > 0){
-					speed -= ACCELERATION;
-					if(speed <= 0){
+					speed *= DECCELERATION;
+					if(speed <= 0.05){
 						speed = 0;
 						return;
 					}
@@ -85,20 +88,16 @@ public class Player extends Sprite{
 			
 			// Calculate a new sub-triangle for the player to follow.
 			trigX = touchX - x;
-			trigY = touchY - y;
+			trigY = y - touchY;
 			distance = Math.sqrt((trigX * trigX) + (trigY * trigY));
 			theta = Math.acos(trigX / distance);			
 			distance = distance / speed;
-			trigX = distance * Math.cos(theta);
-			trigY = distance * Math.sin(theta);
+			xSpeed = distance * Math.cos(theta);
+			ySpeed = distance * Math.sin(theta);
 			
 			// Adjust for the inverted y-axis.
-			x += trigX;
-			if(touchY > y){
-				y += trigY;
-			}else{
-				y -= trigY;
-			}			
+			x += xSpeed;
+			y += ySpeed;		
 		}
 	
 		// Is there a better way to layout all this.
