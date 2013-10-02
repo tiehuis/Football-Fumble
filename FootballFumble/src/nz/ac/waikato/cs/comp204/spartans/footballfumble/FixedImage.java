@@ -1,12 +1,12 @@
 /*
  * File: FixedImage.java - A FixedImage class.
  *
- * OD: 'Name'
+ * OD: Spartans
  * Copyright: Spartans, 23/08/13++
  * License: GNU GPL v2
  * 
  * Notes: This file is used to instantiate a fixedImage
- * Issues: This program may be redundant
+ * Issues:
  * Reference: Sprite
  * Implements:
  * 
@@ -21,7 +21,6 @@ import android.graphics.Bitmap;
  * 
  * Holds a constant for the mass of the fixedImage which is
  * passed to the superclass upon instantiation of a new FixedImage
- * 
  * @author Spartans
  * */
 public class FixedImage extends Sprite{
@@ -29,12 +28,13 @@ public class FixedImage extends Sprite{
 	private static int FIXEDIMAGE_MASS	= 5;
 	
 	/**
-	* Initializes the fixedImage with a mass of 5.
+	* Initializes the fixedImage using {@link 
+ 	* nz.ac.waikato.cs.comp204.spartans.footballfumble.Sprite#Sprite(int, int, int, int, DrawView, Bitmap, double)}
+ 	* with the mass stored in {@link #FIXEDIMAGE_MASS}.
  	* @param initX the initial x position
  	* @param initY the initial y position
  	* @param drawView the view the fixedImage will exist
  	* @param bitmap the bitmap to draw the fixedImage on
- 	* @author 'Name'
  	*/
 	public FixedImage(int initX, int initY, DrawView drawView, Bitmap bitmap) {
 		super(initX, initY, 0, 0, drawView, bitmap, FIXEDIMAGE_MASS);

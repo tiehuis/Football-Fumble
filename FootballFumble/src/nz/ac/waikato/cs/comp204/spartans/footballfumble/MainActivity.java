@@ -1,15 +1,14 @@
 /*
- * File: MainActivity.java - Program Entry point
+ * File: MainActivity.java - The entry point of the program.
  *
- * OD: 'Name'
- * Copyright: Spartans, 15/06/13++
+ * OD: Spartans
+ * Copyright: Spartans, 23/08/13++
  * License: GNU GPL v2
  * 
- * Notes: This file is the entry point for the program
+ * Notes: This file is the entry point for the program.
  * Issues:
  * Reference: Activity
  * Implements:
- * 
  */
 
 package nz.ac.waikato.cs.comp204.spartans.footballfumble;
@@ -17,29 +16,27 @@ package nz.ac.waikato.cs.comp204.spartans.footballfumble;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.app.Activity;
-import android.graphics.Color;
 
 /**
- *  The MainActivity class.
- * 
- *	Is the initial activity that is entered upon program start. The entry point for the program.
- * */
+ * The entry point for the program. Runs the initial code to start the program and set key
+ * elements of the game in place. This includes the contentView, windowFlags and the {@link nz.ac.waikato.cs.comp204.spartans.footballfumble.DrawView}.
+ * @author Spartans
+ */
 public class MainActivity extends Activity {
 	
-	DrawView drawView;
-	
 	/**
-	 * @param savedInstanceState
+	 * The code which runs on startup of this activity.
+	 * @param savedInstanceState the current state of this instance.
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // keeps the screen on
+				
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // keeps screen on
 		
-		// Sets a new drawView with background yellow to occupy the whole available screen.
-		drawView 	= new DrawView(this);
-		drawView.setBackgroundColor(Color.YELLOW);
+		DrawView drawView = new DrawView(this);		
+		drawView.setBackgroundResource(R.drawable.pitch);					  // sets background to the pitch
 		setContentView(drawView);
 	}
 }

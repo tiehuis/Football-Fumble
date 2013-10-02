@@ -1,109 +1,85 @@
 /*
- * File: Sprite.java - A Sprite Class
+ * File: Sprite1.java - A dummy Sprite class which contains all the internal functionality of the class this is derived from (excluding draw methods), 
+ * but does not require any drawView class to run correctly.
  *
  * OD: Spartans
- * Copyright: Spartans, 23/08/13++
+ * Copyright: Spartans, 12/09/13++
  * License: GNU GPL v2
  * 
- * Notes: This file is used to instantiate a Ball
+ * Notes: This file is used as a base for testing Sprite.java
  * Issues:
- * Reference:
+ * Reference: Sprite
  * Implements:
- * 
  */
 
-package nz.ac.waikato.cs.comp204.spartans.footballfumble;
+package nz.ac.waikato.cs.comp204.spartans.tests;
 
 import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 /**
- *  A Sprite class.
- *  <p>
- *  To move x and y use {@link #move(Canvas, int, int)} and 
- *  to delete this instance from the spriteList use {@link #deleteInstance()}
- * 
- *	@author Spartans
- * */
-public class Sprite{
+ * A dummy Sprite class. Used to test the internal methods without requiring a specific drawView or bitmap. 
+ * @author Spartans
+ **/
+public class Sprite1{
 	
-	protected DrawView drawView;
-	protected Bitmap bitmap;
-	protected double xSpeed;
-	protected double ySpeed;
-	protected int x 					= 0;
-	protected int y						= 0;
+	protected double xSpeed, ySpeed, mass;
+	protected int x, y;
 	protected boolean currentCollision	= false;
-	protected double mass 				= 0;
-	
+	protected int scrHeight 			= 200;
+	protected int scrWidth 				= 100;
+	protected int bmpHeight 			= 5;
+	protected int bmpWidth 				= 8;
+		
 	/**
 	 * Initializes the Sprite instance.
 	 * @param initX the initial x position of this sprite.
 	 * @param initY the initial y position of this sprite.
 	 * @param xSpd the initial x speed of this sprite.
 	 * @param ySpd the initial y speed of this sprite.
-	 * @param drawView the view which this sprite is to be drawn on.
-	 * @param bitmap the bitmap image associated with this sprite.
 	 * @param mass the mass of the sprite.
 	 */
-	public Sprite(int initX, int initY, int xSpd, int ySpd, DrawView drawView, Bitmap bitmap, double mass){
+	public Sprite1(int initX, int initY, int xSpd, int ySpd, double mass){
 		this.x 			= initX;
 		this.y 			= initY;
 		this.xSpeed		= xSpd;
 		this.ySpeed 	= ySpd;
-		this.drawView 	= drawView;
-		this.bitmap 	= bitmap;
 		this.mass 		= mass;
-		DrawView.addToList(this);
 	}
 	
 	/**
-	 * Checks the sprites position and runs the code each time {@link #onDraw(Canvas)} is called. 
+	 * Checks the sprites position and moves it according to it's current bounds.
 	 */
 	protected void update(){
 		if(!inxBounds()){
-			x = drawView.getWidth();
-			setxSpeed((getxSpeed() + 3) * -1);
+			x = scrWidth;
+			setxSpeed((getxSpeed() + 3)*-1);
 		}
 		if(!inyBounds()){
-			y = drawView.getHeight();
-			setySpeed((getySpeed() + 3) * -1);
+			y = scrHeight;
+			setySpeed((getySpeed() + 3)*-1);
 		}		
 		x += getxSpeed();
 		y += getySpeed();
 	}
 	
 	/**
-	 * Called whenever the canvas is invalidated. Updates the canvas with this objects bitmap. 
-	 * Calls the {@link #update()} method.
-	 * @param canvas handles what to draw
-	 */
-	public void onDraw(Canvas canvas){
-		update();
-		canvas.drawBitmap(bitmap, x, y, null);
-	}
-	
-	/**
 	 * Moves the point by dx and dy.
 	 * @deprecated the {@link #update()} method is used to move the object.
-	 * @param canvas the canvas being used to draw this image on.
 	 * @param dx the delta to move in the x direction.
 	 * @param dy the delta to move in the y direction.
 	 */
 	@SuppressLint("WrongCall")
-	public void move(Canvas canvas, int dx, int dy){
+	public void move(int dx, int dy){
 		this.x 		+= dx;
 		this.y		+= dy;
-		this.onDraw(canvas);
 	}
 	
 	/**
 	 * Checks the collision status of this instance against another Sprite.
 	 * @param sprite the Sprite being compared against this Sprite.
-	 * @return true if a currentCollision is occuring, false otherwise
+	 * @return true if a currentCollision is occurring, false otherwise
 	 */
-	public boolean collides(Sprite sprite){ // Ccheck the changes made here.
+	public boolean collides(Sprite1 sprite){
 		
 		// If the sprite is already in a collision return false and deal with that first.
 		if(currentCollision){
@@ -132,7 +108,7 @@ public class Sprite{
 	 * Sets the new x and y directional speed.
 	 * @param sprite the sprite that this instance is colliding with
 	 */
-	public void setDirection(Sprite sprite){
+	public void setDirection(Sprite1 sprite){
 		setxSpeed(newxSpeed(sprite));
 		setySpeed(newySpeed(sprite));
 	}
@@ -142,7 +118,7 @@ public class Sprite{
 	 * @param sprite the sprite that this instance is colliding with
 	 * @return the new x direction speed of this sprite
 	 */
-	public double newxSpeed(Sprite sprite){
+	public double newxSpeed(Sprite1 sprite){
 		
 		// Applies momentum to the objects. Player mass is 70, ball is 5. *7 slows initial speed
 		return ((this.xSpeed * this.mass) + (sprite.xSpeed * sprite.mass))/(this.mass * 7);
@@ -153,7 +129,7 @@ public class Sprite{
 	 * @param sprite the sprite that this instance is colliding with
 	 * @return the new y direction speed of this sprite
 	 */
-	public double newySpeed(Sprite sprite){
+	public double newySpeed(Sprite1 sprite){
 		
 		// Applies momentum to the objects. Player mass is 70, ball is 5. *7 slows initial speed
 		return ((this.ySpeed * this.mass) + (sprite.ySpeed * sprite.mass))/(this.mass * 7);		
@@ -165,7 +141,7 @@ public class Sprite{
 	 */
 	public boolean inyBounds(){
 		// Bottom of screen
-		if(y > drawView.getHeight() - bitmap.getHeight() - getySpeed()){
+		if(y > this.scrHeight - this.bmpWidth - getySpeed()){
 			return false;
 		}
 		// Top of screen
@@ -181,7 +157,7 @@ public class Sprite{
 	 */
 	public boolean inxBounds(){
 		// Right of screen
-		if(x > drawView.getWidth() - bitmap.getWidth() - getxSpeed()){
+		if(x > this.scrWidth - this.bmpWidth - getxSpeed()){
 			return false;
 		}
 		// Left of screen
@@ -189,13 +165,6 @@ public class Sprite{
 			return false;
 		}		
 		return true;	
-	}
-	
-	/**
-	 * Deletes this instance from the spriteList, effectively removing the programs access to this instance
-	 */
-	public void deleteInstance(){
-		DrawView.deleteFromList(this);
 	}
 	
 	/**
@@ -216,28 +185,14 @@ public class Sprite{
 	 * @return the x position of the right of the bitmap image on canvas.
 	 */
 	public int getRight(){
-		return this.x + bitmap.getWidth();
+		return this.x + this.bmpWidth;
 	}
 	
 	/**
 	 * @return the y position of the bottom of the bitmap image on canvas,
 	 */
 	public int getBottom(){
-		return this.y + bitmap.getHeight();
-	}
-	
-	/**
-	 * @return the width of bitmap image
-	 */
-	public int getWidth(){
-		return bitmap.getWidth();
-	}
-	
-	/**
-	 * @return the height of the bitmap image
-	 */
-	public int getHeight(){
-		return bitmap.getHeight();
+		return this.y + this.bmpHeight;
 	}
 
 	/**

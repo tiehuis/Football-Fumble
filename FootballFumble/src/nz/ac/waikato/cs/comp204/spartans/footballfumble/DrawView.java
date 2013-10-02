@@ -1,12 +1,12 @@
 /*
  * File: DrawView.java - A DrawView Class
  *
- * OD: 'Name'
+ * OD: Spartans
  * Copyright: Spartans, 23/08/13++
  * License: GNU GPL v2
  * 
  * Notes: This file is used to instantiate a Ball
- * Issues: This program may be redundant
+ * Issues:
  * Reference: View
  * Implements: 
  * 
@@ -15,41 +15,44 @@
 package nz.ac.waikato.cs.comp204.spartans.footballfumble;
 
 import java.util.ArrayList;
-import java.util.Random;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.View;
+import android.util.DisplayMetrics;
 
 /**
- *  The drawView class.
- * 
+ *  This handles drawing of all objects on to screen.
  *	@author Spartans
  * */
 public class DrawView extends View{
 
-	private	Random 		random = new Random();
-	private Ball 		ball;	
+	private Ball ball;	
+	private DisplayMetrics displayMetrics;
+	private int screenWidth;
+	private int screenHeight;
 	private static ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
+	private boolean fixedDisplayed = false;
 	
 	/**
-	 * @param context
+	 * Passes the current context to the View superclass and gets the current screenHeight and Width of this context. 
+	 * Also calls the {@link #setupField()} method.
+	 * @param context the current application environment
 	 */
 	public DrawView(Context context) {
 		super(context);	
-		
-		// Initialize some Sprite objects. Best to create and place this in a new method startUp().
-		Bitmap bitmap1	= BitmapFactory.decodeResource(getResources(),  R.drawable.ball_50px);
-		ball 			= new Ball(random.nextInt(600), random.nextInt(600), this, bitmap1);
-		Bitmap bitmap2 	= BitmapFactory.decodeResource(getResources(),  R.drawable.ic_launcher);
-		Player player1 	= new Player(100, 100, this, bitmap2);		//Need instantiation of classes, even if it says they are not explicitly used.	
+		this.displayMetrics	 = context.getResources().getDisplayMetrics();
+		this.screenHeight	 = displayMetrics.heightPixels;
+		this.screenWidth	 = displayMetrics.widthPixels;
+		setupField();
 	}
 	
 	/**
-	 * 
-	 *@param canvas
+	 * This method is called when the canvas state has changed. It uses the current canvas to draw all the sprite
+	 * objects contained in {@link #spriteList} on to the canvas.
+	 *@param canvas holds the current draw cells
 	 */
 	@SuppressLint("WrongCall")
 	@Override
@@ -60,11 +63,6 @@ public class DrawView extends View{
 			sprite.onDraw(canvas);
 		}
 		
-		// When the ball is draw, slow the x and y speed. Should move out of the DrawView and into Sprite Update method.
-		ball.setxSpeed(ball.getxSpeed() * .95);
-		ball.setySpeed(ball.getySpeed() * .95);
-		
-		// Could place this into a separate method.
 		for (Sprite sprite1 : spriteList){
 			for (Sprite sprite2 : spriteList){
 				if (sprite1 != sprite2){
@@ -79,16 +77,14 @@ public class DrawView extends View{
 							if (sprite2 instanceof Ball){
 								// what occurs to player after colliding with ball
 							}
-						}
-						else if (sprite1 instanceof FixedImage){
+						}else if (sprite1 instanceof FixedImage){
 							if (sprite2 instanceof Player){
 								// what occurs to fixedimage after colliding with player
 							}
 							if (sprite2 instanceof Ball){
 								// what occurs to fixedimage after colliding with ball
 							}
-						}
-						else{ 
+						}else{ 
 							if (sprite2 instanceof Player){
 								sprite1.setDirection(sprite2);		// if a ball collides with a player, set a new direction...
 																	// ...based on the players mass and x,y.
@@ -100,9 +96,32 @@ public class DrawView extends View{
 					}
 				}		
 			}
-		}	
-		
+		}			
 		invalidate();
+	}	
+	
+	/**
+	 * Sets up the field with a default start state.
+	 */
+	public void setupField(){
+		
+		spriteList.clear();
+		
+		// Initialize some Sprite objects.
+		Bitmap bitmap1	= BitmapFactory.decodeResource(getResources(),  R.drawable.ball_25px);
+		Bitmap bitmap2 	= BitmapFactory.decodeResource(getResources(),  R.drawable.player_50_75);
+		Bitmap bitmap3	= BitmapFactory.decodeResource(getResources(),	R.drawable.cone_80_80);
+		ball 			= new Ball(100, 200, this, bitmap1);
+		MatchGlobal.matchBall = ball; // can do this in a more appropriate position
+		Player player1 	= new Player(100, 250, this, bitmap2);
+		AI ai1 = new AI(200, 300, this, bitmap2);
+		
+		if(!fixedDisplayed){			
+			FixedImage cone1 = new FixedImage(this.screenWidth/3-bitmap3.getWidth()/2, this.screenHeight/2-(bitmap3.getHeight()/2), this, bitmap3);
+			FixedImage cone2 = new FixedImage(this.screenWidth/3-bitmap3.getWidth()/2, this.screenHeight/2-(bitmap3.getHeight()/2)+300, this, bitmap3);
+			FixedImage cone3 = new FixedImage(this.screenWidth/3-bitmap3.getWidth()/2, this.screenHeight/2-(bitmap3.getHeight()/2)+600, this, bitmap3);
+			fixedDisplayed	 = true;
+		}
 	}
 	
 	/**
@@ -119,4 +138,3 @@ public class DrawView extends View{
 		spriteList.remove(sprite);
 	}
 }
-
