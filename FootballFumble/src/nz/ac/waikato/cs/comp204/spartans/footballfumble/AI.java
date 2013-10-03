@@ -13,6 +13,8 @@
 
 package nz.ac.waikato.cs.comp204.spartans.footballfumble;
 
+import java.io.*;
+
 import android.graphics.Bitmap;
 
 /**
@@ -21,7 +23,17 @@ import android.graphics.Bitmap;
  * 	Moves the AI sprite towards the ball on each call of {@link #update()}.
  *	@author Spartans
  * */
-public class AI extends Sprite{
+public class AI extends Sprite implements Serializable{
+	
+	// Special serialization class version identifier
+	public static final long serialVersionUID = 1L;					// the version of this class for confirming later serialization reads -- if not explicit, Java auto constructs a version ID
+
+	// Non-serialized static variables and constants
+	private static String backup			= "ai.data";				// the file name to serialize instances to and from
+	private static long   instances			= 0L;						// the number of instances of point created so far -- statics are in the class and are not serialized
+	
+	// Non-serialized instance variables
+	private transient long instance;	
 	
 	private static int TOP_SPEED		= 5;
 	private static int PLAYER_MASS 		= 70;
@@ -96,5 +108,68 @@ public class AI extends Sprite{
 		
 		x 			+= xSpeed;
 		y 			+= ySpeed;
+	}
+	
+	 /**
+     *  Saves an instance to a file using serialization.
+	 *
+	 *  @throws IOException				on file access issues
+     *
+	 */
+    public static void save(AI s) throws IOException {
+		
+		// Debug info
+		System.out.println("in save()");
+
+		// Open a private file for this application id
+		FileOutputStream   fos				= new FileOutputStream(new File(backup));
+		
+		// Wrap the file output stream with a helper filter to write objects
+		ObjectOutputStream oos				= new ObjectOutputStream(fos);
+		
+		// Store the data to the file -- synchronizing to ensure atomic
+		synchronized(s) {
+			oos.writeObject(s);											// ObjectOutputStream checks if overridden otherwise uses default implementation
+		}
+		
+		// Close underlying stream through filter
+		oos.close();
+	
+	}
+    
+    /**
+     *  Loads an instance from a file using serialization.
+	 *
+	 *  @throws IOException				on file access issues
+	 *  @throws ClassNotFoundException	on readObject() error
+     *
+	 */
+    public static AI load() throws IOException, ClassNotFoundException {
+		
+		// Debug info
+		System.out.println("in load()");
+
+		// Open a private file for this application id
+		FileInputStream   fis				= new FileInputStream(new File(backup));
+		
+		// Wrap the file output stream with a helper filter to write objects
+		ObjectInputStream ois				= new ObjectInputStream(fis);
+		
+		// Load the data -- new instance, so no need to synch
+		AI s								= (AI)ois.readObject();
+		
+		// Close underlying stream through filter
+		ois.close();
+		
+		// Debug info
+		System.out.println("after read, s.instance = " + s.instance);
+		
+		// Set the transient final instance id
+		synchronized(AI.class) {
+			s.instance						= ++instances;
+		}		
+		
+		return s;
+		
 	}
 }

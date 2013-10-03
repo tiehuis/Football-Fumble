@@ -114,7 +114,9 @@ public class DrawView extends View{
 		ball 			= new Ball(100, 200, this, bitmap1);
 		MatchGlobal.matchBall = ball; // can do this in a more appropriate position
 		Player player1 	= new Player(100, 250, this, bitmap2);
+		MatchGlobal.player = player1;
 		AI ai1 = new AI(200, 300, this, bitmap2);
+		MatchGlobal.ai = ai1;
 		
 		if(!fixedDisplayed){			
 			FixedImage cone1 = new FixedImage(this.screenWidth/3-bitmap3.getWidth()/2, this.screenHeight/2-(bitmap3.getHeight()/2), this, bitmap3);

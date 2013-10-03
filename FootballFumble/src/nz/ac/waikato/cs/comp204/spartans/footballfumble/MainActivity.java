@@ -38,5 +38,46 @@ public class MainActivity extends Activity {
 		DrawView drawView = new DrawView(this);		
 		drawView.setBackgroundResource(R.drawable.pitch);					  // sets background to the pitch
 		setContentView(drawView);
+		
+		try{
+			if(Ball.load() != null)
+				MatchGlobal.matchBall = Ball.load();
+			if(Player.load() != null)
+				MatchGlobal.player = Player.load();
+			if(AI.load() != null)
+				MatchGlobal.ai = AI.load();
+		}
+		catch(Exception e){
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		try{
+			if(Ball.load() != null)
+				MatchGlobal.matchBall = Ball.load();
+			if(Player.load() != null)
+				MatchGlobal.player = Player.load();
+			if(AI.load() != null)
+				MatchGlobal.ai = AI.load();
+		}
+		catch(Exception e){
+			System.err.println(e.getMessage());
+		}
+	}
+	@Override
+	protected void onPause(){
+		super.onPause();
+		try{
+			Ball.save(MatchGlobal.matchBall);
+			Player.save(MatchGlobal.player);
+			AI.save(MatchGlobal.ai);
+		}
+		catch(Exception e){
+			System.err.println(e.getMessage());
+		}
 	}
 }

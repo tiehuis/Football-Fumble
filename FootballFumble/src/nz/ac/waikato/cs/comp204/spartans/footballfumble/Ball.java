@@ -14,6 +14,7 @@
 package nz.ac.waikato.cs.comp204.spartans.footballfumble;
 
 import android.graphics.Bitmap;
+import java.io.*;
 
 /**
  *  A Ball class.
@@ -22,7 +23,18 @@ import android.graphics.Bitmap;
  * 	passed to the superclass upon instantiation of a new Ball.
  *  @author Spartans
  * */
-public class Ball extends Sprite{
+public class Ball extends Sprite implements Serializable{
+	
+	// Special serialization class version identifier
+			public static final long serialVersionUID = 1L;					// the version of this class for confirming later serialization reads -- if not explicit, Java auto constructs a version ID
+
+	 	// Non-serialized static variables and constants
+		private static String backup			= "ball.data";				// the file name to serialize instances to and from
+		private static long   instances			= 0L;						// the number of instances of point created so far -- statics are in the class and are not serialized
+
+		// Non-serialized instance variables
+		private transient long instance;									// marking transiant stops auto backup and restore
+
 	
 	private static int BALL_MASS = 5;
 	
@@ -43,8 +55,8 @@ public class Ball extends Sprite{
 		
 		// When the ball is draw, slow the x and y speed.
 		if(Math.abs(this.getxSpeed()) > 0.5 || Math.abs(this.getySpeed()) > 0.5){
-			this.setxSpeed(ball.getxSpeed() * .95);
-			this.setySpeed(ball.getySpeed() * .95);
+			this.setxSpeed(this.getxSpeed() * .95);
+			this.setySpeed(this.getySpeed() * .95);
 
 		}else{
 			// If x or y speed is less than 0.3, stop the ball moving
@@ -63,5 +75,68 @@ public class Ball extends Sprite{
 		
 		x += getxSpeed();
 		y += getySpeed();
+	}
+	
+	/**
+     *  Saves an instance to a file using serialization.
+	 *
+	 *  @throws IOException				on file access issues
+     *
+	 */
+    public static void save(Ball b) throws IOException {
+		
+		// Debug info
+		System.out.println("in save()");
+
+		// Open a private file for this application id
+		FileOutputStream   fos				= new FileOutputStream(new File(backup));
+		
+		// Wrap the file output stream with a helper filter to write objects
+		ObjectOutputStream oos				= new ObjectOutputStream(fos);
+		
+		// Store the data to the file -- synchronizing to ensure atomic
+		synchronized(b) {
+			oos.writeObject(b);											// ObjectOutputStream checks if overridden otherwise uses default implementation
+		}
+		
+		// Close underlying stream through filter
+		oos.close();
+	
+	}
+    
+    /**
+     *  Loads an instance from a file using serialization.
+	 *
+	 *  @throws IOException				on file access issues
+	 *  @throws ClassNotFoundException	on readObject() error
+     *
+	 */
+    public static Ball load() throws IOException, ClassNotFoundException {
+		
+		// Debug info
+		System.out.println("in load()");
+
+		// Open a private file for this application id
+		FileInputStream   fis				= new FileInputStream(new File(backup));
+		
+		// Wrap the file output stream with a helper filter to write objects
+		ObjectInputStream ois				= new ObjectInputStream(fis);
+		
+		// Load the data -- new instance, so no need to synch
+		Ball b								= (Ball)ois.readObject();
+		
+		// Close underlying stream through filter
+		ois.close();
+		
+		// Debug info
+		System.out.println("after read, s.instance = " + b.instance);
+		
+		// Set the transient final instance id
+		synchronized(Ball.class) {
+			b.instance						= ++instances;
+		}		
+		
+		return b;
+		
 	}
 }

@@ -18,6 +18,8 @@ import java.util.Timer;
 public class MatchGlobal {
 	
 	public static Ball matchBall;
+	public static Player player;
+	public static AI ai;
 	public static Timer matchTimer = new Timer();
 
 	public static void matchStart(){
