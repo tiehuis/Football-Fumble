@@ -15,7 +15,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="nz.ac.waikato.cs.comp204.spartans.footballfumble.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
